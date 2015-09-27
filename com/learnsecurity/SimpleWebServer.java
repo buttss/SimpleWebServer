@@ -72,6 +72,9 @@ public class SimpleWebServer {
         else if (command.equals("PUT")) {
             putFile(osw, pathname);
             System.out.println(request);
+            while (st.hasMoreTokens()){
+                System.out.println(st.nextToken());
+            }
         }
         else if (command.equals("POST")){
 
