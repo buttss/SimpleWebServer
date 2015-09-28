@@ -12,6 +12,7 @@ package com.learnsecurity;
 
 import java.io.*;
 import java.net.*;
+import java.security.AccessControlException;
 import java.util.*;
 
 public class SimpleWebServer {
@@ -37,6 +38,13 @@ public class SimpleWebServer {
         }
     }
 
+    private String CONTENT_LENGTH_KEY = "Content-Length";
+
+    private class InvalidHTTPVersionException extends Exception {}
+    private class InvalidURLLengthException extends Exception {}
+    private class InvalidHTTPProtocolException extends Exception {}
+    private class InvalidPathException extends Exception {}
+
     /* Reads the HTTP request from the client, and
        responds with the file the user requested or
        a HTTP error code. */
@@ -55,6 +63,7 @@ public class SimpleWebServer {
 
         String command = null;
         String pathname = null;
+        String protocolInfo = null;
      
  	/* parse the HTTP request */
         StringTokenizer st =
@@ -62,37 +71,123 @@ public class SimpleWebServer {
 
         command = st.nextToken();
         pathname = st.nextToken();
+        protocolInfo = st.nextToken();
+
+        final byte[] utf8Bytes = pathname.getBytes("UTF-8");
+        if (utf8Bytes.length > 1000) {
+            osw.write("HTTP/1.0 414 Request-URI Too Long\n\n");
+            throw new InvalidURLLengthException();
+        }
+
+        boolean canAccess = canAccessFileAtPath(pathname);
+        if (!canAccess) {
+            osw.write("HTTP/1.0 403 Forbidden\n\n");
+            throw new InvalidPathException();
+        }
+
+        String[] infoSplit = protocolInfo.split("/");
+        String protocol = infoSplit[0];
+        String version = infoSplit[1];
+
+        if (protocol == null || version == null){
+            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            throw new InvalidHTTPVersionException();
+        }
+
+        boolean isValidVersion = version.equals("1.1") || version.equals("1.0");
+        boolean isValidProtocol = protocol.equals("HTTP");
+
+        if (!isValidVersion) {
+            osw.write("HTTP/1.0 505 HTTP Version Not Supported\n\n");
+            throw new InvalidHTTPVersionException();
+        }
+
+        if (!isValidProtocol) {
+            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            throw new InvalidHTTPProtocolException();
+        }
+
+        Map requestHeaders = null;
+        boolean areHeadersValid = true;
+        try {
+            requestHeaders = requestHeadersFromReader(br);
+        } catch (HeaderFormatException e){
+            areHeadersValid = false;
+        }
+
+        if (!areHeadersValid){
+            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            throw new InvalidHTTPProtocolException();
+        }
 
         if (command.equals("GET")) {
-	    /* if the request is a GET
-	       try to respond with the file
-	       the user is requesting */
+                 /* if the request is a GET
+               try to respond with the file
+               the user is requesting */
             serveFile(osw, pathname);
         }
         else if (command.equals("PUT")) {
-            putFile(osw, pathname);
-            System.out.println(request);
-            String line;
-            while ((line = br.readLine()) != null){
-                System.out.println(line);
+            Integer contentLength = (Integer)requestHeaders.get(CONTENT_LENGTH_KEY);
+            if (contentLength != null) {
+                putFile(br, osw, pathname);
+            }
+            else {
+                osw.write("HTTP/1.0 411 Length Required\n\n");
             }
         }
-        else if (command.equals("POST")){
-
-        }
         else {
-	    /* if the request is a NOT a GET,
-	       return an error saying this server
-	       does not implement the requested command */
+                /* if the request is a NOT a GET,
+               return an error saying this server
+               does not implement the requested command */
             osw.write("HTTP/1.0 501 Not Implemented\n\n");
         }
- 	
- 	/* close the connection to the client */
+
+        /* close the connection to the client */
         osw.close();
     }
 
-    public void putFile(OutputStreamWriter osw,
+    private boolean canAccessFileAtPath(String path) {
+        boolean result = true;
+        File fileForPath = new File(path);
+
+        try {
+            fileForPath.getCanonicalFile();
+        } catch (IOException e) {
+            result = false;
+        }catch (AccessControlException ex) {
+            result = false;
+        } catch (SecurityException ex) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    private class HeaderFormatException extends Exception {}
+
+    private Map<String, String> requestHeadersFromReader(BufferedReader headerReader) throws IOException, HeaderFormatException{
+        Map<String, String> headerMap = new HashMap<>();
+
+        String line;
+        while (!(line = headerReader.readLine()).equals("\n")){
+            String[] headerValueSplit = line.split(": ");
+            String name = headerValueSplit[0];
+            String value = headerValueSplit[1];
+
+            if (name.endsWith(" ") || name == null || value == null || value.startsWith(" ")) {
+                throw new HeaderFormatException();
+            }
+
+            headerMap.put(name, value);
+        }
+
+        return headerMap;
+    }
+
+    public void putFile(BufferedReader fileInput,
+                        OutputStreamWriter osw,
                         String pathname) throws Exception {
+
         System.out.println("PUT REQUEST");
     }
 
