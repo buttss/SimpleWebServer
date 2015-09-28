@@ -150,7 +150,7 @@ public class SimpleWebServer {
         File fileForPath = new File(path);
 
         try {
-            fileForPath.getCanonicalFile();
+            fileForPath.getCanonicalPath();
         } catch (IOException e) {
             result = false;
             System.out.println("IO Exception");
