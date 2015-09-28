@@ -153,10 +153,13 @@ public class SimpleWebServer {
             fileForPath.getCanonicalFile();
         } catch (IOException e) {
             result = false;
+            System.out.println("IO Exception");
         }catch (AccessControlException ex) {
             result = false;
+            System.out.println("Access Control Exception");
         } catch (SecurityException ex) {
             result = false;
+            System.out.println("Security Exception");
         }
 
         return result;
