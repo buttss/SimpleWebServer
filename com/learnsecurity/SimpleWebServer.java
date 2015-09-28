@@ -166,7 +166,7 @@ public class SimpleWebServer {
     private class HeaderFormatException extends Exception {}
 
     private Map<String, String> requestHeadersFromReader(BufferedReader headerReader) throws IOException, HeaderFormatException{
-        Map<String, String> headerMap = new HashMap<>();
+        Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
         while (!(line = headerReader.readLine()).equals("\n")){
