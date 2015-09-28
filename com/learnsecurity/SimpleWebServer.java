@@ -169,7 +169,7 @@ public class SimpleWebServer {
         Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
-        while (!(line = headerReader.readLine()).equals("\n\n")){
+        while (!(line = headerReader.readLine()).equals("")){
             System.out.println(line);
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
