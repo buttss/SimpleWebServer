@@ -127,8 +127,8 @@ public class SimpleWebServer {
             serveFile(osw, pathname);
         }
         else if (command.equals("PUT")) {
-            Integer contentLength = (Integer)requestHeaders.get(CONTENT_LENGTH_KEY);
-            if (contentLength != null) {
+            String contentLengthString = (String)requestHeaders.get(CONTENT_LENGTH_KEY);
+            if (contentLengthString != null) {
                 putFile(br, osw, pathname);
             }
             else {
