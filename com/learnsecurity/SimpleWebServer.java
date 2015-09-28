@@ -195,6 +195,7 @@ public class SimpleWebServer {
 
     public void serveFile(OutputStreamWriter osw,
                           String pathname) throws Exception {
+        System.out.println(pathname);
         FileReader fr = null;
         int c = -1;
         StringBuffer sb = new StringBuffer();
