@@ -76,13 +76,13 @@ public class SimpleWebServer {
         final byte[] utf8Bytes = pathname.getBytes("UTF-8");
         if (utf8Bytes.length > 1000) {
             osw.write("HTTP/1.0 414 Request-URI Too Long\n\n");
-            throw new InvalidURLLengthException();
+            return;
         }
 
         boolean canAccess = canAccessFileAtPath(pathname);
         if (!canAccess) {
             osw.write("HTTP/1.0 403 Forbidden\n\n");
-            throw new InvalidPathException();
+            return;
         }
 
         String[] infoSplit = protocolInfo.split("/");
@@ -91,7 +91,7 @@ public class SimpleWebServer {
 
         if (protocol == null || version == null){
             osw.write("HTTP/1.0 400 Bad Request\n\n");
-            throw new InvalidHTTPVersionException();
+            return;
         }
 
         boolean isValidVersion = version.equals("1.1") || version.equals("1.0");
@@ -99,25 +99,24 @@ public class SimpleWebServer {
 
         if (!isValidVersion) {
             osw.write("HTTP/1.0 505 HTTP Version Not Supported\n\n");
-            throw new InvalidHTTPVersionException();
+            return;
         }
 
         if (!isValidProtocol) {
             osw.write("HTTP/1.0 400 Bad Request\n\n");
-            throw new InvalidHTTPProtocolException();
+            return;
         }
 
         Map requestHeaders = null;
-        boolean areHeadersValid = true;
         try {
             requestHeaders = requestHeadersFromReader(br);
         } catch (HeaderFormatException e){
-            areHeadersValid = false;
+
         }
 
-        if (!areHeadersValid){
+        if (requestHeaders == null){
             osw.write("HTTP/1.0 400 Bad Request\n\n");
-            throw new InvalidHTTPProtocolException();
+            return;
         }
 
         if (command.equals("GET")) {
@@ -170,7 +169,6 @@ public class SimpleWebServer {
 
         String line;
         while (!(line = headerReader.readLine()).equals("")){
-            System.out.println(line);
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
