@@ -225,9 +225,12 @@ public class SimpleWebServer {
             int i = 0;
             String line;
 
-            while ((b = (byte)fileInput.read()) != -1) {
-                bytes[i++] = b;
+            while ((line = fileInput.readLine()) != null){
+                System.out.println(line);
             }
+//            while ((b = (byte)fileInput.read()) != -1) {
+//                bytes[i++] = b;
+//            }
 
             File newFile = new File(pathname);
 
