@@ -172,6 +172,7 @@ public class SimpleWebServer {
             // neither of which is accepted
             if (contentLengthString != null) {
                 int contentLength = Integer.parseInt(contentLengthString);
+                br.readLine();
                 putFile(br, osw, contentLength, pathname);
             }
             else {
