@@ -200,8 +200,7 @@ public class SimpleWebServer {
         Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
-        while ((line = headerReader.readLine()) != null){
-            System.out.println(line);
+        while (!(line = headerReader.readLine()).equals("")){
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
@@ -225,12 +224,10 @@ public class SimpleWebServer {
             byte b;
             int i = 0;
             String line;
-            while ((line = fileInput.readLine()) != null) {
-                System.out.println(line);
+
+            while ((b = (byte)fileInput.read()) != -1) {
+                bytes[i++] = b;
             }
-//            while ((b = (byte)fileInput.read()) != -1) {
-//                bytes[i++] = b;
-//            }
 
             File newFile = new File(pathname);
 
