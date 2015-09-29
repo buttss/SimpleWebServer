@@ -74,7 +74,6 @@ public class SimpleWebServer {
         protocolInfo = st.nextToken();
 
         final byte[] utf8Bytes = pathname.getBytes("UTF-8");
-        System.out.println(utf8Bytes.length + "");
         if (utf8Bytes.length > 1000) {
             writeAndClose(osw, "HTTP/1.0 414 Request-URI Too Long\n\n");
             return;
@@ -84,6 +83,8 @@ public class SimpleWebServer {
         File currentDir = new File(".");
         String filepath = file.getCanonicalPath();
         String currentpath = currentDir.getCanonicalPath();
+        System.out.println(filepath);
+        System.out.println(currentpath);
         if (!filepath.startsWith(currentpath)){
             writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
             return;
