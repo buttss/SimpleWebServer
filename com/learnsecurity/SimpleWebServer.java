@@ -248,6 +248,7 @@ public class SimpleWebServer {
             osw.write (response);
         }
         catch (Exception e) {
+            System.out.println(e.getMessage() +" "+e.getCause());
             osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
         } finally {
