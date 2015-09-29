@@ -226,11 +226,6 @@ public class SimpleWebServer {
                         String pathname) throws Exception{
         BufferedWriter fileWriter = null;
         try {
-            /* remove the initial slash at the beginning
- 	   of the pathname in the request */
-            if (pathname.charAt(0) == '/')
-                pathname = pathname.substring(1);
-
             String response;
 
             File f = new File(pathname);
