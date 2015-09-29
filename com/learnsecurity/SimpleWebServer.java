@@ -223,7 +223,8 @@ public class SimpleWebServer {
             byte[] bytes = new byte[contentLength];
             byte b;
             int i = 0;
-             
+
+            fileInput.read();
             while ((b = (byte)fileInput.read()) != -1) {
                 bytes[i++] = b;
             }
