@@ -247,7 +247,7 @@ public class SimpleWebServer {
 //                fileWriter.write(line);
 //            }
             System.out.println("wrote to file");
-            osw.write (response);
+            osw.write(response);
         }
         catch (Exception e) {
             System.out.println(e.getMessage() +" "+e.getCause());
