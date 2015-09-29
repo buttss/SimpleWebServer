@@ -230,7 +230,6 @@ public class SimpleWebServer {
 
             File f = new File(pathname);
             if (!f.exists()) {
-                f.createNewFile();
                 response = "HTTP/1.0 201 Created\n\n";
             } else {
                 response = "HTTP/1.0 200 OK\n\n";
