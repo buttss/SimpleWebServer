@@ -228,8 +228,17 @@ public class SimpleWebServer {
         try {
             String response;
 
+            /* remove the initial slash at the beginning
+        of the pathname in the request */
+            if (pathname.charAt(0)=='/')
+                pathname=pathname.substring(1);
+
+        /* If there was no file name, make it a time stamped file */
+            if (pathname.equals(""))
+                pathname= System.currentTimeMillis() + "";
+
             File f = new File(pathname);
-            if (!f.exists()) {
+            if (f != null && f.isFile()) {
                 response = "HTTP/1.0 201 Created\n\n";
             } else {
                 response = "HTTP/1.0 200 OK\n\n";
@@ -249,6 +258,7 @@ public class SimpleWebServer {
             osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
         } finally {
+            System.out.println("finally block");
             fileWriter.close();
         }
     }
