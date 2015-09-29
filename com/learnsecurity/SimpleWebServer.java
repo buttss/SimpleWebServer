@@ -69,10 +69,40 @@ public class SimpleWebServer {
         StringTokenizer st =
                 new StringTokenizer(request, " ");
 
-        command = st.nextToken();
-        pathname = st.nextToken();
-        protocolInfo = st.nextToken();
+        //makes sure a command is provided
+        if (st.hasMoreTokens()) {
+            command = st.nextToken();
+        }
+        else {
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
+            return;
+        }
 
+        //makes sure a pathname is provided
+        if (st.hasMoreTokens()) {
+            pathname = st.nextToken();
+        }
+        else {
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
+            return;
+        }
+
+        //makes sure a protocol is provided
+        if (st.hasMoreTokens()) {
+            protocolInfo = st.nextToken();
+        }
+        else {
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
+            return;
+        }
+
+        //avoids more than 3 parameters
+        if (st.hasMoreTokens()) {
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
+            return;
+        }
+
+        //makes sure the resource path is less than 1KB
         final byte[] utf8Bytes = pathname.getBytes("UTF-8");
         if (utf8Bytes.length > 1000) {
             writeAndClose(osw, "HTTP/1.0 414 Request-URI Too Long\n\n");
@@ -83,12 +113,15 @@ public class SimpleWebServer {
         String protocol = infoSplit[0];
         String version = infoSplit[1];
 
+        //check to see that version and protocol could be split properly
         if (protocol == null || version == null){
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
 
+        //makes sure the http version is 1.1 or 1.0
         boolean isValidVersion = version.equals("1.1") || version.equals("1.0");
+        //makes sure that protocol is HTTP
         boolean isValidProtocol = protocol.equals("HTTP");
 
         if (!isValidVersion) {
@@ -101,6 +134,10 @@ public class SimpleWebServer {
             return;
         }
 
+        //gets the canonical path of the working directory,
+        // and the specified path,
+        // and makes sure that the specified path is a sub
+        // file or directory of the working directory
         File file = new File(pathname);
         File currentDir = new File(".");
         String filepath = file.getCanonicalPath();
@@ -108,7 +145,6 @@ public class SimpleWebServer {
         System.out.println(filepath);
         System.out.println(currentpath);
         boolean startsWith = filepath.startsWith(currentpath);
-        System.out.println(startsWith);
         if (!startsWith){
             writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
             return;
@@ -116,10 +152,15 @@ public class SimpleWebServer {
 
         Map requestHeaders = null;
         boolean caughtException = false;
-        requestHeaders = requestHeadersFromReader(br);
+        try {
+            requestHeaders = requestHeadersFromReader(br);
+        } catch (IOException e) {
+            caughtException = true;
+        } catch (HeaderFormatException e) {
+            caughtException = true;
+        }
 
-        System.out.println(caughtException);
-        if (caughtException){
+        if (caughtException || requestHeaders == null){
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
@@ -128,7 +169,6 @@ public class SimpleWebServer {
                  /* if the request is a GET
                try to respond with the file
                the user is requesting */
-            System.out.println("GET");
             serveFile(osw, pathname);
         }
         else if (command.equals("PUT")) {
