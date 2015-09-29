@@ -40,11 +40,6 @@ public class SimpleWebServer {
 
     private String CONTENT_LENGTH_KEY = "Content-Length";
 
-    private class InvalidHTTPVersionException extends Exception {}
-    private class InvalidURLLengthException extends Exception {}
-    private class InvalidHTTPProtocolException extends Exception {}
-    private class InvalidPathException extends Exception {}
-
     /* Reads the HTTP request from the client, and
        responds with the file the user requested or
        a HTTP error code. */
@@ -160,6 +155,7 @@ public class SimpleWebServer {
             caughtException = true;
         }
 
+        //makes sure the headers could be properly parsed and that headers map isnt null
         if (caughtException || requestHeaders == null){
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
@@ -173,8 +169,12 @@ public class SimpleWebServer {
         }
         else if (command.equals("PUT")) {
             String contentLengthString = (String)requestHeaders.get(CONTENT_LENGTH_KEY);
+            //content length value must exist and by the get method returning null,
+            // that means the key did not exist or the value for that header was null,
+            // neither of which is accepted
             if (contentLengthString != null) {
-                putFile(br, osw, pathname);
+                int contentLength = Integer.parseInt(contentLengthString);
+                putFile(br, osw, contentLength, pathname);
             }
             else {
                 osw.write("HTTP/1.0 411 Length Required\n\n");
@@ -220,9 +220,31 @@ public class SimpleWebServer {
 
     public void putFile(BufferedReader fileInput,
                         OutputStreamWriter osw,
-                        String pathname) throws Exception {
+                        int contentLength,
+                        String pathname) throws Exception{
+        try {
+            byte[] bytes = new byte[contentLength];
+            for (int i = 0; i < contentLength; i++) {
+                byte b = 0;
+                try {
+                    b = (byte)fileInput.read();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                bytes[i] = b;
+            }
 
-        System.out.println("PUT REQUEST");
+            File newFile = new File(pathname);
+            newFile.mkdirs();
+            newFile.createNewFile();
+
+            FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+            fileOutputStream.write(bytes);
+            fileOutputStream.close();
+        } catch (Exception e) {
+            osw.write("HTTP/1.0 404 Not Found\n\n");
+            return;
+        }
     }
 
     public void serveFile(OutputStreamWriter osw,
