@@ -152,7 +152,6 @@ public class SimpleWebServer {
         } catch (IOException e) {
             caughtException = true;
         } catch (HeaderFormatException e) {
-            System.out.println("Header Exception");
             caughtException = true;
         }
 
@@ -232,9 +231,7 @@ public class SimpleWebServer {
             String response;
 
             File f = new File(pathname);
-            f.setWritable(true, false);
-            System.out.println("created file");
-            if (f != null && f.isFile()) {
+            if (f != null && f.isFile() && !f.exists()) {
                 response = "HTTP/1.0 201 Created\n\n";
             } else {
                 response = "HTTP/1.0 200 OK\n\n";
@@ -243,15 +240,12 @@ public class SimpleWebServer {
             fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
             while((line = fileInput.readLine()) != null && !line.isEmpty()){
-                System.out.println(line);
                 fileWriter.write(line);
             }
 
-            System.out.println("wrote to file");
             osw.write(response);
         }
         catch (Exception e) {
-            System.out.println(e.getMessage() +" "+e.getCause());
             osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
         } finally {
