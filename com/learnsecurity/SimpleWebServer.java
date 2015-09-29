@@ -240,6 +240,7 @@ public class SimpleWebServer {
             System.out.println(contentLength);
 
             while (i++ < contentLength) {
+                System.out.println(i+"");
                 fileOutputStream.write(fileInput.read());
             }
             System.out.println("ended while");
