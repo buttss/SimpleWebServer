@@ -115,13 +115,17 @@ public class SimpleWebServer {
         }
 
         Map requestHeaders = null;
+        boolean caughtException = false;
         try {
             requestHeaders = requestHeadersFromReader(br);
         } catch (HeaderFormatException e){
-
+            caughtException = true;
+        }
+        catch (IOException e) {
+            caughtException = true;
         }
 
-        if (requestHeaders == null){
+        if (caughtException){
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
@@ -160,7 +164,7 @@ public class SimpleWebServer {
 
     private class HeaderFormatException extends Exception {}
 
-    private Map<String, String> requestHeadersFromReader(BufferedReader headerReader) throws IOException, HeaderFormatException{
+    private Map<String, String> requestHeadersFromReader(BufferedReader headerReader) throws HeaderFormatException, IOException {
         Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
