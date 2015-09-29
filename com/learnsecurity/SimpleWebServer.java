@@ -242,6 +242,7 @@ public class SimpleWebServer {
             System.out.println("writing to file");
             while((line = fileInput.readLine()) != null && !line.isEmpty()){
                 System.out.println("wrote line");
+                System.out.println(line);
                 fileWriter.write(line);
             }
             System.out.println("wrote to file");
