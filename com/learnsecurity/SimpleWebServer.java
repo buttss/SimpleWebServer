@@ -84,8 +84,7 @@ public class SimpleWebServer {
         String filepath = file.getCanonicalPath();
         String currentpath = currentDir.getCanonicalPath();
         if (!filepath.startsWith(currentpath)){
-            System.out.println("GET");
-            osw.write("HTTP/1.0 403 Forbidden\n\n");
+            writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
             return;
         }
 
@@ -94,7 +93,7 @@ public class SimpleWebServer {
         String version = infoSplit[1];
 
         if (protocol == null || version == null){
-            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
 
@@ -102,12 +101,12 @@ public class SimpleWebServer {
         boolean isValidProtocol = protocol.equals("HTTP");
 
         if (!isValidVersion) {
-            osw.write("HTTP/1.0 505 HTTP Version Not Supported\n\n");
+            writeAndClose(osw, "HTTP/1.0 505 HTTP Version Not Supported\n\n");
             return;
         }
 
         if (!isValidProtocol) {
-            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
 
@@ -119,7 +118,7 @@ public class SimpleWebServer {
         }
 
         if (requestHeaders == null){
-            osw.write("HTTP/1.0 400 Bad Request\n\n");
+            writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
         }
 
@@ -148,6 +147,11 @@ public class SimpleWebServer {
 
         /* close the connection to the client */
         osw.close();
+    }
+
+    private void writeAndClose(OutputStreamWriter writer, String string) throws IOException {
+        writer.write(string);
+        writer.close();
     }
 
     private class HeaderFormatException extends Exception {}
