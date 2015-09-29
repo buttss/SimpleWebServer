@@ -262,7 +262,7 @@ public class SimpleWebServer {
         FileReader fr = null;
         int c = -1;
         StringBuffer sb = new StringBuffer();
-       
+
  	/* remove the initial slash at the beginning
  	   of the pathname in the request */
         if (pathname.charAt(0) == '/')
