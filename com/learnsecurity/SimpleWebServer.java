@@ -107,7 +107,9 @@ public class SimpleWebServer {
         String currentpath = currentDir.getCanonicalPath();
         System.out.println(filepath);
         System.out.println(currentpath);
-        if (!filepath.startsWith(currentpath)){
+        boolean startsWith = filepath.startsWith(currentpath);
+        System.out.println(startsWith);
+        if (!startsWith){
             writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
             return;
         }
