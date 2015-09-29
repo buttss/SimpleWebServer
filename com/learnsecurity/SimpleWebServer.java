@@ -237,9 +237,11 @@ public class SimpleWebServer {
 
             fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
+            System.out.println("writing to file");
             while((line = fileInput.readLine()) != null && !line.isEmpty()){
                 fileWriter.write(line);
             }
+            System.out.println("wrote to file");
             osw.write (response);
         }
         catch (Exception e) {
