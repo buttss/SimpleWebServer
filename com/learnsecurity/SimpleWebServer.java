@@ -201,6 +201,7 @@ public class SimpleWebServer {
 
         String line;
         while ((line = headerReader.readLine()) != null){
+            System.out.println(line);
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
