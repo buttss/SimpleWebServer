@@ -175,7 +175,7 @@ public class SimpleWebServer {
                 try {
                     putFile(br, osw, contentLength, pathname);
                 } catch (Exception e) {
-                    System.out.println("CAUGHT A STUPID FUCKING EXCEPTION!@!!!!");
+                    System.out.println(e.getMessage() +" "+e.getCause());
                 }
 
             }
@@ -230,7 +230,7 @@ public class SimpleWebServer {
  	   of the pathname in the request */
             if (pathname.charAt(0) == '/')
                 pathname = pathname.substring(1);
-            
+
             String response;
 
             File f = new File(pathname);
