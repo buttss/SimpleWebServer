@@ -225,6 +225,14 @@ public class SimpleWebServer {
                         int contentLength,
                         String pathname) throws Exception{
         try {
+            int b;
+            byte[] bytes = new byte[contentLength];
+            int i = 0;
+            System.out.println(contentLength);
+            while (i < contentLength) {
+                bytes[i++] = (byte)fileInput.read();
+            }
+
             File newFile = new File(pathname);
 
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
@@ -232,14 +240,8 @@ public class SimpleWebServer {
             if (!newFile.exists()){
                 newFile.createNewFile();
             }
-
-            int b;
-            int i = 0;
-            System.out.println(contentLength);
-            while (i++ < contentLength) {
-                fileOutputStream.write(fileInput.read());
-            }
             System.out.println("ended while");
+            fileOutputStream.write(bytes);
             fileOutputStream.flush();
             fileOutputStream.close();
 
