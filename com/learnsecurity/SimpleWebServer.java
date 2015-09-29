@@ -225,24 +225,25 @@ public class SimpleWebServer {
                         int contentLength,
                         String pathname) throws Exception{
         try {
-            int b;
-            byte[] bytes = new byte[contentLength];
-            int i = 0;
-            System.out.println(contentLength);
-            while (i < contentLength) {
-                bytes[i++] = (byte)fileInput.read();
-            }
-
             File newFile = new File(pathname);
 
-            FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+            BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(newFile));
 
             if (!newFile.exists()){
                 newFile.createNewFile();
             }
+
+            int b;
+            byte[] bytes = new byte[contentLength];
+            int i = 0;
+
+            System.out.println(contentLength);
+
+            while (i < contentLength) {
+                fileOutputStream.write(fileInput.read());
+            }
             System.out.println("ended while");
-            fileOutputStream.write(bytes);
-            fileOutputStream.flush();
+
             fileOutputStream.close();
 
             osw.write("HTTP/1.0 200 OK\n\n");
