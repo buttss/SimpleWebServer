@@ -234,10 +234,10 @@ public class SimpleWebServer {
 
             fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
+            System.out.println(contentLength+"");
             System.out.println("writing to file");
             int i = 0;
             while (i < contentLength) {
-                System.out.println("wrote line");
                 fileWriter.write(fileInput.read());
                 i++;
             }
