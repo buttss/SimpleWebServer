@@ -251,7 +251,9 @@ public class SimpleWebServer {
                     fileWriter.write(line);
                 }
             } catch (IOException ex) {
-
+                fileInput.close();
+                osw.write("Shit went bad\n\n");
+                osw.close();
             }
 
             System.out.println("wrote to file");
