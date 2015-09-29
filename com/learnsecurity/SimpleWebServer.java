@@ -235,11 +235,16 @@ public class SimpleWebServer {
             fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
             System.out.println("writing to file");
-            while((line = fileInput.readLine()) != null && !line.isEmpty()){
+            int i = 0;
+            while (i < contentLength) {
                 System.out.println("wrote line");
-                System.out.println(line);
-                fileWriter.write(line);
+                fileWriter.write(fileInput.read());
+                i++;
             }
+//            while((line = fileInput.readLine()) != null && !line.isEmpty()){
+//                System.out.println(line);
+//                fileWriter.write(line);
+//            }
             System.out.println("wrote to file");
             osw.write (response);
         }
