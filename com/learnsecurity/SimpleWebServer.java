@@ -222,9 +222,10 @@ public class SimpleWebServer {
                         String pathname) throws Exception{
         try {
             byte[] bytes = new byte[contentLength];
-            for (int i = 0; i < contentLength; i++) {
-                byte b = (byte)fileInput.read();
-                bytes[i] = b;
+            byte b;
+            int i = 0;
+            while ((b = (byte)fileInput.read()) != -1) {
+                bytes[i++] = b;
             }
 
             System.out.println("bytes in array");
