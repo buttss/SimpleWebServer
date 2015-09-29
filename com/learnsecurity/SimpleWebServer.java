@@ -234,14 +234,9 @@ public class SimpleWebServer {
             }
 
             int b;
-            byte[] bytes = new byte[contentLength];
-            int i = 0;
-
             System.out.println(contentLength);
-
-            while (i++ < contentLength) {
-                System.out.println(i+"");
-                fileOutputStream.write(fileInput.read());
+            while ((b = fileInput.read()) != -1) {
+                fileOutputStream.write(b);
             }
             System.out.println("ended while");
 
