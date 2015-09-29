@@ -207,7 +207,6 @@ public class SimpleWebServer {
 
         String line;
         while (!(line = headerReader.readLine()).isEmpty()){
-            System.out.println(line+"*");
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
@@ -243,17 +242,9 @@ public class SimpleWebServer {
 
             fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
-            System.out.println(contentLength+"");
-            System.out.println("writing to file");
-            try {
-                while((line = fileInput.readLine()) != null && !line.isEmpty()){
-                    System.out.println(line);
-                    fileWriter.write(line);
-                }
-            } catch (IOException ex) {
-                fileInput.close();
-                osw.write("Shit went bad\n\n");
-                osw.close();
+            while((line = fileInput.readLine()) != null && !line.isEmpty()){
+                System.out.println(line);
+                fileWriter.write(line);
             }
 
             System.out.println("wrote to file");
@@ -264,7 +255,6 @@ public class SimpleWebServer {
             osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
         } finally {
-            System.out.println("finally block");
             fileWriter.close();
         }
     }
@@ -274,11 +264,6 @@ public class SimpleWebServer {
         FileReader fr = null;
         int c = -1;
         StringBuffer sb = new StringBuffer();
-
- 	/* remove the initial slash at the beginning
- 	   of the pathname in the request */
-        if (pathname.charAt(0) == '/')
-            pathname = pathname.substring(1);
  	
  	/* if there was no filename specified by the
  	   client, serve the "index.html" file */
@@ -287,7 +272,6 @@ public class SimpleWebServer {
  
  	/* try to open file specified by pathname */
         try {
-            System.out.println(pathname);
             fr = new FileReader(pathname);
             c = fr.read();
         } catch (Exception e) {
