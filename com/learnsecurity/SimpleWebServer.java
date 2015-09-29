@@ -172,7 +172,6 @@ public class SimpleWebServer {
             // neither of which is accepted
             if (contentLengthString != null) {
                 int contentLength = Integer.parseInt(contentLengthString);
-                br.readLine();
                 putFile(br, osw, contentLength, pathname);
             }
             else {
@@ -228,22 +227,15 @@ public class SimpleWebServer {
                 bytes[i++] = b;
             }
 
-            System.out.println("bytes in array");
-
             File newFile = new File(pathname);
-            System.out.println("file created");
 
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
-            System.out.println("stream created");
 
             fileOutputStream.write(bytes);
-            System.out.println("bytes written");
 
             fileOutputStream.close();
-            System.out.println("stream closed");
 
             osw.write("HTTP/1.0 200 OK\n\n");
-            System.out.println("output 200");
         } catch (FileNotFoundException e) {
             osw.write("HTTP/1.0 404 Not Found\n\n");
             return;
