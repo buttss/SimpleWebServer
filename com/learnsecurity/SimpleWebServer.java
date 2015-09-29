@@ -239,7 +239,7 @@ public class SimpleWebServer {
 
             System.out.println(contentLength);
 
-            while (i < contentLength) {
+            while (i++ < contentLength) {
                 fileOutputStream.write(fileInput.read());
             }
             System.out.println("ended while");
