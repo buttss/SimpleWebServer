@@ -116,14 +116,7 @@ public class SimpleWebServer {
 
         Map requestHeaders = null;
         boolean caughtException = false;
-        try {
-            requestHeaders = requestHeadersFromReader(br);
-        } catch (HeaderFormatException e){
-            caughtException = true;
-        }
-        catch (IOException e) {
-            caughtException = true;
-        }
+        requestHeaders = requestHeadersFromReader(br);
 
         System.out.println(caughtException);
         if (caughtException){
