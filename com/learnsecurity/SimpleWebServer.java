@@ -74,6 +74,7 @@ public class SimpleWebServer {
         protocolInfo = st.nextToken();
 
         final byte[] utf8Bytes = pathname.getBytes("UTF-8");
+        System.out.println(utf8Bytes.length + "");
         if (utf8Bytes.length > 1000) {
             osw.write("HTTP/1.0 414 Request-URI Too Long\n\n");
             return;
