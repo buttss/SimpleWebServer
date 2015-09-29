@@ -79,8 +79,12 @@ public class SimpleWebServer {
             return;
         }
 
-        boolean canAccess = canAccessFileAtPath(pathname);
-        if (!canAccess) {
+
+        File file = new File(pathname);
+        File currentDir = new File(".");
+        String filepath = file.getCanonicalPath();
+        String currentpath = currentDir.getCanonicalPath();
+        if (!filepath.startsWith(currentpath)){
             osw.write("HTTP/1.0 403 Forbidden\n\n");
             return;
         }
@@ -153,13 +157,10 @@ public class SimpleWebServer {
             fileForPath.getCanonicalPath();
         } catch (IOException e) {
             result = false;
-            System.out.println("IO Exception");
         }catch (AccessControlException ex) {
             result = false;
-            System.out.println("Access Control Exception");
         } catch (SecurityException ex) {
             result = false;
-            System.out.println("Security Exception");
         }
 
         return result;
