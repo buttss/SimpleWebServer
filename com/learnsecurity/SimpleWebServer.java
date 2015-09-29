@@ -232,7 +232,7 @@ public class SimpleWebServer {
 
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
 
-//            fileInput.read();
+            fileInput.read();
 
             int b;
             while ((b = fileInput.read()) != -1) {
