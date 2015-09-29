@@ -235,9 +235,6 @@ public class SimpleWebServer {
             }
 
             File newFile = new File(pathname);
-            newFile.mkdirs();
-            newFile.createNewFile();
-
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
             fileOutputStream.write(bytes);
             fileOutputStream.close();
