@@ -206,6 +206,7 @@ public class SimpleWebServer {
 
         String line;
         while (!(line = headerReader.readLine()).equals("")){
+            System.out.println(line+"*");
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
@@ -238,6 +239,8 @@ public class SimpleWebServer {
                 pathname= System.currentTimeMillis() + "";
 
             File f = new File(pathname);
+            f = f.getCanonicalFile();
+            System.out.println("created file");
             if (f != null && f.isFile()) {
                 response = "HTTP/1.0 201 Created\n\n";
             } else {
@@ -248,6 +251,7 @@ public class SimpleWebServer {
             String line = null;
             System.out.println("writing to file");
             while((line = fileInput.readLine()) != null && !line.isEmpty()){
+                System.out.println("wrote line");
                 fileWriter.write(line);
             }
             System.out.println("wrote to file");
