@@ -221,7 +221,6 @@ public class SimpleWebServer {
                         String pathname) throws Exception{
         try {
             byte[] bytes = new byte[contentLength];
-            byte b;
             int i = 0;
 
             File newFile = new File(pathname);
@@ -230,8 +229,9 @@ public class SimpleWebServer {
 
 //            fileInput.read();
 
-            while (i++ < contentLength) {
-                fileOutputStream.write(fileInput.read());
+            int b;
+            while ((b = fileInput.read()) != -1) {
+                fileOutputStream.write(b);
             }
 
             fileOutputStream.close();
