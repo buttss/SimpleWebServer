@@ -225,20 +225,19 @@ public class SimpleWebServer {
                         int contentLength,
                         String pathname) throws Exception{
         try {
-            byte[] bytes = new byte[contentLength];
-            int i = 0;
-
             File newFile = new File(pathname);
 
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
 
-            fileInput.read();
+            if (!newFile.exists()){
+                newFile.createNewFile();
+            }
 
             int b;
             while ((b = fileInput.read()) != -1) {
                 fileOutputStream.write(b);
             }
-
+            fileOutputStream.flush();
             fileOutputStream.close();
 
             osw.write("HTTP/1.0 200 OK\n\n");
