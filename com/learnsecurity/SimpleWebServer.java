@@ -79,17 +79,6 @@ public class SimpleWebServer {
             return;
         }
 
-        File file = new File(pathname);
-        File currentDir = new File(".");
-        String filepath = file.getCanonicalPath();
-        String currentpath = currentDir.getCanonicalPath();
-        System.out.println(filepath);
-        System.out.println(currentpath);
-        if (!filepath.startsWith(currentpath)){
-            writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
-            return;
-        }
-
         String[] infoSplit = protocolInfo.split("/");
         String protocol = infoSplit[0];
         String version = infoSplit[1];
@@ -109,6 +98,17 @@ public class SimpleWebServer {
 
         if (!isValidProtocol) {
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
+            return;
+        }
+
+        File file = new File(pathname);
+        File currentDir = new File(".");
+        String filepath = file.getCanonicalPath();
+        String currentpath = currentDir.getCanonicalPath();
+        System.out.println(filepath);
+        System.out.println(currentpath);
+        if (!filepath.startsWith(currentpath)){
+            writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
             return;
         }
 
