@@ -201,7 +201,7 @@ public class SimpleWebServer {
         Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
-        while (!(line = headerReader.readLine()).equals("")){
+        while (!(line = headerReader.readLine()).isEmpty()){
             System.out.println(line+"*");
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
