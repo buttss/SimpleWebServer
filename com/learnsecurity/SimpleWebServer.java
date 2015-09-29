@@ -201,7 +201,7 @@ public class SimpleWebServer {
         Map<String, String> headerMap = new HashMap<String, String>();
 
         String line;
-        while ((line = headerReader.readLine()) != null){
+        while (!(line = headerReader.readLine()).isEmpty()){
             System.out.println(line+"*");
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
@@ -238,7 +238,6 @@ public class SimpleWebServer {
             String line = null;
             System.out.println(contentLength+"");
             System.out.println("writing to file");
-            fileInput.readLine();
             int i = 0;
             while (i < contentLength) {
                 fileWriter.write(fileInput.read());
