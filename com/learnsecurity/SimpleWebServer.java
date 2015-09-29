@@ -137,8 +137,6 @@ public class SimpleWebServer {
         File currentDir = new File(".");
         String filepath = file.getCanonicalPath();
         String currentpath = currentDir.getCanonicalPath();
-        System.out.println(filepath);
-        System.out.println(currentpath);
         boolean startsWith = filepath.startsWith(currentpath);
         if (!startsWith){
             writeAndClose(osw, "HTTP/1.0 403 Forbidden\n\n");
@@ -203,7 +201,6 @@ public class SimpleWebServer {
 
         String line;
         while (!(line = headerReader.readLine()).equals("")){
-            System.out.println(line);
             String[] headerValueSplit = line.split(": ");
             String name = headerValueSplit[0];
             String value = headerValueSplit[1];
@@ -225,13 +222,9 @@ public class SimpleWebServer {
         try {
             byte[] bytes = new byte[contentLength];
             for (int i = 0; i < contentLength; i++) {
-                byte b = 0;
-                try {
-                    b = (byte)fileInput.read();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                byte b = (byte)fileInput.read();
                 bytes[i] = b;
+                System.out.println(b+"");
             }
 
             File newFile = new File(pathname);
