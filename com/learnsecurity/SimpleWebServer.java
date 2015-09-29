@@ -237,6 +237,7 @@ public class SimpleWebServer {
             String line = null;
             System.out.println(contentLength+"");
             System.out.println("writing to file");
+            fileInput.readLine();
             int i = 0;
             while (i < contentLength) {
                 fileWriter.write(fileInput.read());
