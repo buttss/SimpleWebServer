@@ -224,9 +224,13 @@ public class SimpleWebServer {
                         OutputStreamWriter osw,
                         int contentLength,
                         String pathname) throws Exception{
-        BufferedWriter output = null;
-
+        BufferedWriter fileWriter = null;
         try {
+            /* remove the initial slash at the beginning
+ 	   of the pathname in the request */
+            if (pathname.charAt(0) == '/')
+                pathname = pathname.substring(1);
+            
             String response;
 
             File f = new File(pathname);
@@ -236,10 +240,10 @@ public class SimpleWebServer {
                 response = "HTTP/1.0 200 OK\n\n";
             }
 
-            output = new BufferedWriter(new FileWriter(f));
+            fileWriter = new BufferedWriter(new FileWriter(f));
             String line = null;
-            while((line = fileInput.readLine()) != null){
-                output.write(line);
+            while((line = fileInput.readLine()) != null && !line.isEmpty()){
+                fileWriter.write(line);
             }
             osw.write (response);
         }
@@ -247,7 +251,7 @@ public class SimpleWebServer {
             osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
         } finally {
-            output.close();
+            fileWriter.close();
         }
     }
 
