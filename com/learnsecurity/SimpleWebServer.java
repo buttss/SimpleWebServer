@@ -127,6 +127,7 @@ public class SimpleWebServer {
                  /* if the request is a GET
                try to respond with the file
                the user is requesting */
+            System.out.println("GET");
             serveFile(osw, pathname);
         }
         else if (command.equals("PUT")) {
@@ -147,23 +148,6 @@ public class SimpleWebServer {
 
         /* close the connection to the client */
         osw.close();
-    }
-
-    private boolean canAccessFileAtPath(String path) {
-        boolean result = true;
-        File fileForPath = new File(path);
-
-        try {
-            fileForPath.getCanonicalPath();
-        } catch (IOException e) {
-            result = false;
-        }catch (AccessControlException ex) {
-            result = false;
-        } catch (SecurityException ex) {
-            result = false;
-        }
-
-        return result;
     }
 
     private class HeaderFormatException extends Exception {}
