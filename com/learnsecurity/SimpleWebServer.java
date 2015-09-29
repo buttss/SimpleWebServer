@@ -79,12 +79,12 @@ public class SimpleWebServer {
             return;
         }
 
-
         File file = new File(pathname);
         File currentDir = new File(".");
         String filepath = file.getCanonicalPath();
         String currentpath = currentDir.getCanonicalPath();
         if (!filepath.startsWith(currentpath)){
+            System.out.println("GET");
             osw.write("HTTP/1.0 403 Forbidden\n\n");
             return;
         }
