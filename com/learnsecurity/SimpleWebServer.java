@@ -172,7 +172,12 @@ public class SimpleWebServer {
             // neither of which is accepted
             if (contentLengthString != null) {
                 int contentLength = Integer.parseInt(contentLengthString);
-                putFile(br, osw, contentLength, pathname);
+                try {
+                    putFile(br, osw, contentLength, pathname);
+                } catch (Exception e) {
+                    System.out.println("CAUGHT A STUPID FUCKING EXCEPTION!@!!!!");
+                }
+
             }
             else {
                 osw.write("HTTP/1.0 411 Length Required\n\n");
