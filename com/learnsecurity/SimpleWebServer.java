@@ -224,7 +224,6 @@ public class SimpleWebServer {
             for (int i = 0; i < contentLength; i++) {
                 byte b = (byte)fileInput.read();
                 bytes[i] = b;
-                System.out.println(b+"");
             }
 
             File newFile = new File(pathname);
@@ -233,7 +232,7 @@ public class SimpleWebServer {
             fileOutputStream.close();
 
             osw.write("HTTP/1.0 200 OK\n\n");
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             osw.write("HTTP/1.0 404 Not Found\n\n");
             return;
         }
