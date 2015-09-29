@@ -150,6 +150,7 @@ public class SimpleWebServer {
         } catch (IOException e) {
             caughtException = true;
         } catch (HeaderFormatException e) {
+            System.out.println("Header Exception");
             caughtException = true;
         }
 
