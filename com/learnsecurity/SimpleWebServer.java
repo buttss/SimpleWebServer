@@ -225,6 +225,7 @@ public class SimpleWebServer {
             String response;
 
             File f = new File(pathname);
+            f.setWritable(true, false);
             System.out.println("created file");
             if (f != null && f.isFile()) {
                 response = "HTTP/1.0 201 Created\n\n";
