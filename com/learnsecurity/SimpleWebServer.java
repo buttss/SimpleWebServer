@@ -224,28 +224,30 @@ public class SimpleWebServer {
                         OutputStreamWriter osw,
                         int contentLength,
                         String pathname) throws Exception{
+        BufferedWriter output = null;
+
         try {
-            File newFile = new File(pathname);
+            String response;
 
-            BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(newFile));
-
-            if (!newFile.exists()){
-                newFile.createNewFile();
+            File f = new File(pathname);
+            if (!f.exists()) {
+                response = "HTTP/1.0 201 Created\n\n";
+            } else {
+                response = "HTTP/1.0 200 OK\n\n";
             }
 
-            int b;
-            System.out.println(contentLength);
-            while ((b = fileInput.read()) != -1) {
-                fileOutputStream.write(b);
+            output = new BufferedWriter(new FileWriter(f));
+            String line = null;
+            while((line = fileInput.readLine()) != null){
+                output.write(line);
             }
-            System.out.println("ended while");
-
-            fileOutputStream.close();
-
-            osw.write("HTTP/1.0 200 OK\n\n");
-        } catch (FileNotFoundException e) {
-            osw.write("HTTP/1.0 404 Not Found\n\n");
+            osw.write (response);
+        }
+        catch (Exception e) {
+            osw.write ("HTTP/1.0 400 Bad Request\n\n");
             return;
+        } finally {
+            output.close();
         }
     }
 
