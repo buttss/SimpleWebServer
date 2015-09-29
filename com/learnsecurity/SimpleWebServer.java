@@ -64,6 +64,7 @@ public class SimpleWebServer {
         StringTokenizer st =
                 new StringTokenizer(request, " ");
 
+        //Sean Butts
         //makes sure a command is provided
         if (st.hasMoreTokens()) {
             command = st.nextToken();
@@ -146,6 +147,7 @@ public class SimpleWebServer {
         Map requestHeaders = null;
         boolean caughtException = false;
         try {
+            //put the request headers into a map
             requestHeaders = requestHeadersFromReader(br);
         } catch (IOException e) {
             caughtException = true;
@@ -166,6 +168,7 @@ public class SimpleWebServer {
                the user is requesting */
             serveFile(osw, pathname);
         }
+        //Sean Butts
         else if (command.equals("PUT")) {
             String contentLengthString = (String)requestHeaders.get(CONTENT_LENGTH_KEY);
             //content length value must exist and by the get method returning null,
@@ -195,8 +198,10 @@ public class SimpleWebServer {
         writer.close();
     }
 
+    //Sean Butts
+    //class for throwing an exception when a header is not in the proper format
     private class HeaderFormatException extends Exception {}
-
+    //method to read the request headers from the buffered reader and putting them into a map object
     private Map<String, String> requestHeadersFromReader(BufferedReader headerReader) throws HeaderFormatException, IOException {
         Map<String, String> headerMap = new HashMap<String, String>();
 
@@ -217,6 +222,8 @@ public class SimpleWebServer {
         return headerMap;
     }
 
+    //Sean Butts
+    //method for the web server PUT method
     public void putFile(BufferedReader fileInput,
                         OutputStreamWriter osw,
                         int contentLength,
@@ -258,7 +265,6 @@ public class SimpleWebServer {
 
     public void serveFile(OutputStreamWriter osw,
                           String pathname) throws Exception {
-        System.out.println(pathname);
         FileReader fr = null;
         int c = -1;
         StringBuffer sb = new StringBuffer();
@@ -275,6 +281,7 @@ public class SimpleWebServer {
  
  	/* try to open file specified by pathname */
         try {
+            System.out.println(pathname);
             fr = new FileReader(pathname);
             c = fr.read();
         } catch (Exception e) {
