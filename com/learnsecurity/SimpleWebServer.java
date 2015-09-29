@@ -241,6 +241,8 @@ public class SimpleWebServer {
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
             fileOutputStream.write(bytes);
             fileOutputStream.close();
+
+            osw.write("HTTP/1.0 200 OK\n\n");
         } catch (Exception e) {
             osw.write("HTTP/1.0 404 Not Found\n\n");
             return;
