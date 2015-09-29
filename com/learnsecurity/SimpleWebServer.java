@@ -125,6 +125,7 @@ public class SimpleWebServer {
             caughtException = true;
         }
 
+        System.out.println(caughtException);
         if (caughtException){
             writeAndClose(osw, "HTTP/1.0 400 Bad Request\n\n");
             return;
