@@ -224,16 +224,15 @@ public class SimpleWebServer {
             byte b;
             int i = 0;
 
-            fileInput.read();
-            while ((b = (byte)fileInput.read()) != -1) {
-                bytes[i++] = b;
-            }
-
             File newFile = new File(pathname);
 
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
 
-            fileOutputStream.write(bytes);
+//            fileInput.read();
+
+            while (i++ < contentLength) {
+                fileOutputStream.write(fileInput.read());
+            }
 
             fileOutputStream.close();
 
