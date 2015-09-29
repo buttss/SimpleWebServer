@@ -245,9 +245,13 @@ public class SimpleWebServer {
             String line = null;
             System.out.println(contentLength+"");
             System.out.println("writing to file");
-            while((line = fileInput.readLine()) != null && !line.isEmpty()){
-                System.out.println(line);
-                fileWriter.write(line);
+            try {
+                while((line = fileInput.readLine()) != null && !line.isEmpty()){
+                    System.out.println(line);
+                    fileWriter.write(line);
+                }
+            } catch (IOException ex) {
+
             }
 
             System.out.println("wrote to file");
